@@ -15,10 +15,6 @@ func RegisterRouter(r gin.IRouter, JWT *jwt.GinJWTMiddleware) {
 		log.Fatal("[InitRouter]: server is nil")
 	}
 
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	{
 		r.POST("/create", makeBucket)
 	}
@@ -28,7 +24,7 @@ func RegisterRouter(r gin.IRouter, JWT *jwt.GinJWTMiddleware) {
 func makeBucket(c *gin.Context) {
 	var (
 		req struct {
-			bucketName int    `json:"bucketname"         binding:"required"`
+			bucketName string `json:"bucketname"         binding:"required"`
 			location   string `json:"location"           binding:"required"`
 		}
 	)
@@ -40,7 +36,7 @@ func makeBucket(c *gin.Context) {
 		return
 	}
 
-	err := minio.MakeBucket(req.bucketName, req.location)
+	err = minio.MakeBucket(req.bucketName, req.location)
 	if err != nil {
 		c.Error(err)
 		c.JSON(http.StatusBadGateway, gin.H{"status": http.StatusBadGateway})

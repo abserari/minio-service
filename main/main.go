@@ -3,7 +3,8 @@ package main
 import (
 	jwt "github.com/appleboy/gin-jwt"
 	"github.com/gin-gonic/gin"
-	"github.com/yhyddr/minio-service/bucket/controller"
+	bucket "github.com/yhyddr/minio-service/bucket/controller"
+	object "github.com/yhyddr/minio-service/object/controller"
 )
 
 var (
@@ -14,7 +15,9 @@ var (
 func main() {
 	router := gin.Default()
 
-	controller.RegisterRouter(router.Group("/api/v1/bucket"), JWTMiddleware)
+	bucket.RegisterRouter(router.Group("/api/v1/bucket"), JWTMiddleware)
+
+	object.RegisterRouter(router.Group("/api/v1/object"), JWTMiddleware)
 
 	router.Run(":8000")
 }
